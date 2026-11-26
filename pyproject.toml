@@ -3,9 +3,9 @@ requires = ["hatchling>=1.24"]
 build-backend = "hatchling.build"
 
 [project]
-name = "accounting-agent"
+name = "nome-do-projeto"
 version = "0.1.0"
-description = "Agente de IA para tarefas contábeis — projeto do curso I2A2 Brasil."
+description = "Descrição curta do projeto — I2A2 Brasil."
 readme = "README.md"
 license = { file = "LICENSE" }
 requires-python = ">=3.11"
@@ -21,7 +21,7 @@ dev = [
 ]
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/accounting_agent"]
+packages = ["src/nome_do_projeto"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

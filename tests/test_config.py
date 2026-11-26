@@ -1,4 +1,4 @@
-from accounting_agent.config import Settings
+from nome_do_projeto.config import Settings
 
 
 def test_defaults(monkeypatch):

@@ -2,7 +2,7 @@
 
 Repositório template para projetos do **I2A2 Brasil** (Institut d'Intelligence Artificielle Appliquée).
 
-Ele segue a estrutura proposta no curso para o projeto `accounting-agent`: um pacote Python em
+Ele segue a estrutura de projeto Python proposta no curso: um pacote em
 layout `src/`, com configuração por variáveis de ambiente, testes e documentação separados.
 
 > Para usar: clique em **Use this template** no GitHub, crie seu repositório e siga os
@@ -13,13 +13,13 @@ layout `src/`, com configuração por variáveis de ambiente, testes e documenta
 ## Estrutura
 
 ```
-accounting-agent/
+nome-do-projeto/
 ├── pyproject.toml
 ├── README.md
 ├── LICENSE
 ├── .env.example
 ├── .gitignore
-├── src/accounting_agent/
+├── src/nome_do_projeto/
 │   ├── __init__.py
 │   ├── llm/
 │   ├── agents/
@@ -45,7 +45,7 @@ accounting-agent/
 | `.env` *(não versionado)* | Cópia do `.env.example` com os valores reais (chaves de API etc.). Fica só na sua máquina — está no `.gitignore`. |
 | `.gitignore` | Arquivos que o Git deve ignorar: `.env`, ambientes virtuais (`.venv/`), caches do Python e das ferramentas, artefatos de build e arquivos de IDE/SO. |
 
-### `src/accounting_agent/` — código do pacote
+### `src/nome_do_projeto/` — código do pacote
 
 O layout `src/` evita que os testes importem o código "por acidente" a partir da pasta atual: o
 pacote precisa estar instalado (`pip install -e .`), exatamente como em produção.
@@ -55,14 +55,14 @@ pacote precisa estar instalado (`pip install -e .`), exatamente como em produç�
 | `__init__.py` | Marca a pasta como pacote Python e expõe `__version__`. Pode reexportar as classes/funções principais para facilitar imports. |
 | `config.py` | Configuração central. Carrega o `.env` com `python-dotenv` e expõe um objeto imutável `Settings` (provedor e modelo de LLM, chave de API, nível de log) via `get_settings()`. Todo o resto do código lê configuração **daqui**, nunca direto de `os.environ`. Ao criar uma nova variável, adicione-a em `Settings`, no `.env.example` e em um teste. |
 | `llm/` | Integração com os modelos de linguagem: clientes/adaptadores para OpenAI, Anthropic, Gemini, Ollama etc. A ideia é isolar os detalhes de cada SDK atrás de uma interface simples (ex.: `generate(prompt) -> str`), para trocar de provedor mudando só a configuração. |
-| `agents/` | Os agentes propriamente ditos. Cada agente combina um LLM, um prompt de sistema e um conjunto de tools/skills para cumprir um objetivo (ex.: classificar lançamentos contábeis, conciliar extratos, responder dúvidas fiscais). Um módulo por agente. |
-| `tools/` | Ferramentas que os agentes podem chamar: funções **determinísticas** e bem tipadas, com docstring clara (o LLM usa a descrição para decidir quando chamá-las). Ex.: ler CSV/XML de notas fiscais, consultar banco de dados, calcular impostos. |
-| `skills/` | Habilidades reutilizáveis de mais alto nível: prompts, playbooks e sequências de tools que podem ser compartilhadas entre vários agentes (ex.: "analisar uma nota fiscal", "gerar relatório mensal"). |
+| `agents/` | Os agentes propriamente ditos. Cada agente combina um LLM, um prompt de sistema e um conjunto de tools/skills para cumprir um objetivo (ex.: classificar documentos, extrair informações de arquivos, responder perguntas sobre uma base). Um módulo por agente. |
+| `tools/` | Ferramentas que os agentes podem chamar: funções **determinísticas** e bem tipadas, com docstring clara (o LLM usa a descrição para decidir quando chamá-las). Ex.: ler arquivos CSV/JSON/PDF, consultar uma API ou banco de dados, fazer cálculos. |
+| `skills/` | Habilidades reutilizáveis de mais alto nível: prompts, playbooks e sequências de tools que podem ser compartilhadas entre vários agentes (ex.: "resumir um documento", "gerar relatório"). |
 
 ### `tests/`
 
-Testes automatizados com **pytest**. Espelhe a estrutura de `src/` (ex.: `tests/tools/test_nfe.py`
-para `src/accounting_agent/tools/nfe.py`). O `test_config.py` já incluso mostra como testar código
+Testes automatizados com **pytest**. Espelhe a estrutura de `src/` (ex.: `tests/tools/test_leitor_csv.py`
+para `src/nome_do_projeto/tools/leitor_csv.py`). O `test_config.py` já incluso mostra como testar código
 que depende de variáveis de ambiente usando `monkeypatch`. Testes não devem chamar APIs pagas —
 use mocks/fakes para o LLM.
 
@@ -100,7 +100,7 @@ cp .env.example .env   # Windows: copy .env.example .env
 Edite o `.env` e preencha `LLM_API_KEY` e demais valores. No código:
 
 ```python
-from accounting_agent.config import get_settings
+from nome_do_projeto.config import get_settings
 
 settings = get_settings()
 print(settings.llm_provider, settings.llm_model)
@@ -128,8 +128,8 @@ ruff format .
 
 Depois de criar seu repositório a partir dele:
 
-- [ ] Renomeie o projeto em `pyproject.toml` (`name`, `description`, `authors`) se não for o `accounting-agent`.
-- [ ] Se renomear o pacote, renomeie também a pasta `src/accounting_agent/` e os imports.
+- [ ] Em `pyproject.toml`, troque `name = "nome-do-projeto"`, `description` e `authors`.
+- [ ] Renomeie a pasta `src/nome_do_projeto/` para o nome do seu pacote (snake_case, ex.: `accounting_agent`) e atualize `packages` no `pyproject.toml` e os imports em `tests/`.
 - [ ] Ajuste o copyright em `LICENSE`.
 - [ ] Reescreva o topo deste README com a descrição do seu projeto.
 - [ ] Adicione ao `pyproject.toml` as bibliotecas do provedor de LLM que for usar.
